@@ -1,6 +1,6 @@
 # Using LLMs in Qualitative Research
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/namigabbasov/llms-for-qual/blob/main/LLMs_for_Qual.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UnitForDataScience/Prompting-Qual-Insight/blob/main/Prompting_Qualitative_Insight.ipynb)
 
 A hands-on workshop notebook for using large language models (LLMs) to analyze interview transcripts. You will explore 10 interviews with university instructors, then run deductive and inductive thematic coding with the OpenAI API, and export the results as coding matrices you can review, edit and compare with human coding.
 
@@ -23,7 +23,7 @@ Both coding sections produce a coding matrix (one row per response, one column p
 ## Repository contents
 
 ```
-LLMs_for_Qual.ipynb   workshop notebook
+Prompting_Qualitative_Insight.ipynb   workshop notebook
 data/                 10 de-identified interview transcripts (UCSB01.pdf ... UCSB10.pdf)
 outputs/              results from a full run of the notebook, for reference
 ```
