@@ -1,4 +1,4 @@
-# LLMs for Qualitative Research
+# Using LLMs in Qualitative Research
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/namigabbasov/llms-for-qual/blob/main/LLMs_for_Qual.ipynb)
 
@@ -13,7 +13,7 @@ No local installation is needed. Everything runs in Google Colab.
 | Set up | Install libraries, load your API key from Colab Secrets, choose a model |
 | Make a request | Send a first prompt to the model |
 | Load interview data | Load the 10 workshop interviews from this repo (or upload your own) and ask the model questions about them |
-| Exploratory data analysis | Document lengths, word cloud, word frequencies, sentiment, TF-IDF, a PCA map of interviews, and LLM-generated topic labels |
+| Exploratory data analysis | Document lengths, word cloud, word frequencies, TF-IDF, a PCA map of interviews, and LLM-generated topic labels |
 | Deductive thematic analysis | Code every instructor response against a predefined codebook (0/1 per theme) |
 | Inductive thematic analysis | Let the model propose themes from all transcripts, then code every response against them |
 | Download results | Download everything in `outputs/` as one zip file |
@@ -28,29 +28,15 @@ data/                 10 de-identified interview transcripts (UCSB01.pdf ... UCS
 outputs/              results from a full run of the notebook, for reference
 ```
 
-## Before the workshop
+## During the workshop
 
-You need a Google account and an OpenAI API key with a small amount of credit.
+You will need a Google account to work on Google Colab. It is free and incredibly user-friendly. We will provide an API key you can use during the workshop.
 
-**1. Create an OpenAI API key**
-
-1. Sign in at [platform.openai.com](https://platform.openai.com).
-2. Add a payment method under Billing. A few dollars of credit is enough for the workshop.
-3. Go to API keys and create a new secret key. Copy it. You will not be able to see it again.
-
-**2. Open the notebook and save your own copy**
+**1. Open the notebook and save your own copy**
 
 1. Click the **Open in Colab** badge above.
 2. In Colab, go to **File → Save a copy in Drive**. Work in your copy, not the original.
 
-**3. Add your key to Colab Secrets**
-
-1. In your copy, click the key icon in the left sidebar.
-2. Click **Add new secret**.
-3. Name it exactly `OPENAI_API_KEY` and paste your key as the value.
-4. Turn on **Notebook access**.
-
-The notebook reads the key with `userdata.get("OPENAI_API_KEY")`, so it never appears in your code or outputs. Never paste your key into a notebook cell or share it in chat.
 
 ## Data
 
@@ -64,20 +50,6 @@ The deductive codebook in the notebook is written for this research question:
 
 > How do university instructors adapt their data-teaching practices to meet diverse student needs and evolving technological and institutional contexts?
 
-### Using your own transcripts
-
-In the "Load Interview Data" cell, comment out option 1 and uncomment option 2 to upload your own PDF or TXT files. Each turn should start with a speaker label:
-
-```
-I: Can you tell me about the course you teach?
-UCSB01: Sure. I teach an introductory data course for about two hundred students...
-```
-
-`I:` marks the interviewer and `UCSB01:`, `UCSB02:` and so on mark participants. Only participant turns are coded. If your transcripts use different labels, edit the speaker pattern in the "define themes" cell:
-
-```python
-parts = re.split(r"(\bI\s*:|\b(?i:UCSB)\s*\d*\s*:)", text)
-```
 
 ## How the coding works
 
@@ -111,7 +83,7 @@ codes = [
 Each instructor response is sent with this prompt:
 
 ```
-You are a qualitative coding assistant. Read the passage and decide whether each of {len(codes)} themes appears.
+Read the passage and decide whether each of {len(codes)} themes appears.
 Return ONLY valid JSON with each key = theme and value = 1 (present) or 0 (absent).
 Themes: {', '.join(codes)}
 Passage: """{response}"""
@@ -122,7 +94,6 @@ Passage: """{response}"""
 First pass, run once on all transcripts:
 
 ```
-You are QualLLM, a qualitative researcher.
 Read following transcripts and list 5-6 inductive themes that best capture recurring ideas across interviews.
 Give each theme a short label of 2-6 words.
 Return ONLY valid JSON in this format:
@@ -134,7 +105,6 @@ Transcripts:
 Second pass, run on each instructor response:
 
 ```
-You are QualLLM, a qualitative coding assistant.
 Determine whether each of the following themes appears in this passage.
 Return ONLY valid JSON with each theme as key and 1 (present) or 0 (absent) as value.
 
@@ -189,32 +159,64 @@ The `outputs/` folder holds the results of one full run of the notebook on the 1
 
 ![Inductive themes by interview](outputs/inductive_heatmap.png)
 
-## Adapting the notebook
+## Interpreting results
+
+LLM coding is a starting point for analysis, not a replacement for it. Models can miss nuance, over-apply themes and give different answers on repeated runs. Treat the coding matrices as a first pass: read the coded passages, compare them with your own coding, and document how you used the model in your methods section.
+
+## After the workshop
+and an OpenAI API key with a small amount of credit.
+
+**1. Create an OpenAI API key**
+
+1. Sign in at [platform.openai.com](https://platform.openai.com).
+2. Add a payment method under Billing. A few dollars of credit is enough for the workshop.
+3. Go to API keys and create a new secret key. Copy it. You will not be able to see it again.
+
+**2. Add your key to Colab Secrets**
+
+1. In your copy, click the key icon in the left sidebar.
+2. Click **Add new secret**.
+3. Name it exactly `OPENAI_API_KEY` and paste your key as the value.
+4. Turn on **Notebook access**.
+
+The notebook reads the key with `userdata.get("OPENAI_API_KEY")`, so it never appears in your code or outputs. Never save your key into a notebook cell or share it in chat.
+
+### Adapting the notebook
 
 - **Model:** change `MODEL` in the "Choose Model and Connect to API" cell. Every later cell uses it.
 - **Codebook:** edit the `codes` list in the deductive analysis cell to match your research question.
 - **Prompts:** the coding prompts are plain text inside each cell and are meant to be edited.
 - **Number of inductive themes:** change "5-6" in `overview_prompt`.
 
-## Time and cost
+### Using your own transcripts
+
+In the "Load Interview Data" cell, comment out option 1 and uncomment option 2 to upload your own PDF or TXT files. Each turn should start with a speaker label:
+
+```
+I: Can you tell me about the course you teach?
+UCSB01: Sure. I teach an introductory data course for about two hundred students...
+```
+
+`I:` marks the interviewer and `UCSB01:`, `UCSB02:` and so on mark participants. Only participant turns are coded. If your transcripts use different labels, edit the speaker pattern in the "define themes" cell:
+
+```python
+parts = re.split(r"(\bI\s*:|\b(?i:UCSB)\s*\d*\s*:)", text)
+```
+
+
+### Time and cost
 
 A full run of the notebook on the 10 interviews takes about 8 minutes and makes about 670 API calls. With the default model, `gpt-6-luna`, OpenAI's lowest-cost current model, it costs well under one US dollar. Larger models cost more. Check [OpenAI pricing](https://openai.com/api/pricing) before switching.
 
-## Data privacy
+### Data privacy
 
-Text sent to the API leaves your computer and is processed by OpenAI. The workshop transcripts are already de-identified and public. Before using your own interview data:
+Text sent to the API leaves your computer and is processed by OpenAI. Before using your own interview data:
 
 - Check that your consent forms and IRB or ethics approval permit sharing transcripts with a third-party service.
 - Remove or pseudonymize names and other identifying details.
 - Review OpenAI's [data usage policy](https://openai.com/policies/api-data-usage-policies). By default, API data is not used to train models.
 
-Uploaded files stay in your OpenAI account until you delete them. You can remove them under **Storage** on the OpenAI platform.
-
-## Interpreting results
-
-LLM coding is a starting point for analysis, not a replacement for it. Models can miss nuance, over-apply themes and give different answers on repeated runs. Treat the coding matrices as a first pass: read the coded passages, compare them with your own coding, and document how you used the model in your methods section.
-
-## Troubleshooting
+### Troubleshooting
 
 | Problem | Fix |
 |---|---|
