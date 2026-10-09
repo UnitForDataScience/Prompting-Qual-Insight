@@ -40,7 +40,7 @@ You will need a Google account to work on Google Colab. It is free and incredibl
 **2. Copy the API Key**
 1. Click on the "API Key.pdf" file above.
 2. Download the file to your computer, open it, and copy the key.
-3. When running the notebook, you will be asked to provide your API key, pastes and press "enter/return"
+3. When running the notebook, you will be asked to provide your API key, paste it in the provided input box and press "enter/return"
 
 ### Data
 
