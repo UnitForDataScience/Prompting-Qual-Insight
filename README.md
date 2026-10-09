@@ -37,6 +37,10 @@ You will need a Google account to work on Google Colab. It is free and incredibl
 1. Click the **Open in Colab** badge above.
 2. In Colab, go to **File → Save a copy in Drive**. Work in your copy, not the original.
 
+**2. Copy the API Key**
+1. Click on the "API Key.pdf" file above.
+2. Download the file to your computer, open it, and copy the key.
+3. When running the notebook, you will be asked to provide your API key, pastes and press "enter/return"
 
 ### Data
 
